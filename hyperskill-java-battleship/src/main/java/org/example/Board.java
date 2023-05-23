@@ -2,7 +2,7 @@ package org.example;
 
 public class Board {
     private static final int BOARD_SIZE = 10;
-    private String[][] board = new String[BOARD_SIZE + 1][BOARD_SIZE + 1];
+    private final String[][] board = new String[BOARD_SIZE + 1][BOARD_SIZE + 1];
 
     public Board() {
         board[0][0] = " ";
