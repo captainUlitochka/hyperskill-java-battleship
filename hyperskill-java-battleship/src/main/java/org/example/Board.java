@@ -3,6 +3,11 @@ package org.example;
 public class Board {
     private static final int BOARD_SIZE = 10;
     private final String[][] board = new String[BOARD_SIZE + 1][BOARD_SIZE + 1];
+    private static final String FOG = "~";
+    private static final String SHIP = "O";
+    private static final String HIT = "X";
+    private static final String MISS = "M";
+
 
     public Board() {
         board[0][0] = " ";
@@ -19,7 +24,7 @@ public class Board {
         // Закрашиваем доску
         for (int i = 1; i < BOARD_SIZE + 1; i++) {
             for (int j = 1; j < BOARD_SIZE + 1; j++) {
-                board[i][j] = "~";
+                board[i][j] = FOG;
             }
 
         }
