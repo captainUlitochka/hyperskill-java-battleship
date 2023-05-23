@@ -10,7 +10,7 @@ public class Coordinate {
     }
 
     public byte getYIndex() {
-        return (byte) ((byte)y - (byte)'a' + 1);
+        return (byte) ((byte)y - (byte)'A' + 1);
     }
 
     public byte getX() {

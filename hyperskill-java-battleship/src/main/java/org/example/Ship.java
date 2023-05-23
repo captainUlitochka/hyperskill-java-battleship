@@ -1,22 +1,42 @@
 package org.example;
 
-public enum Ship {
-    /*
-     Aircraft Carrier is 5 cells,
-     Battleship is 4 cells,
-     Submarine is 3 cells,
-     Cruiser is 3 cells,
-     Destroyer is 2 cells.
-     */
-    CARRIER(5), BATTLESHIP(4), SUBMARINE(3), CRUISER(3), DESTROYER(2);
+public class Ship {
+    Coordinate startPoint;
+    Coordinate endPoint;
+    ShipType type;
 
-    private final int size;
-
-    Ship(int size) {
-        this.size = size;
+    private String errorState = "";
+    public Ship(String placement, ShipType type) {
+        this.startPoint = new Coordinate(placement.substring(0, placement.indexOf(" ")));
+        this.endPoint = new Coordinate(placement.substring(placement.indexOf(" ") + 1));
+        this.type = type;
     }
 
-    public int getSize() {
-        return size;
+    byte getXLength() {
+        return (byte) Math.abs(startPoint.getX() - endPoint.getX());
+    }
+
+    byte getYLength() {
+        return (byte) Math.abs(startPoint.getYIndex() - endPoint.getYIndex());
+    }
+
+    public String validateLength() {
+        if (startPoint.getX() < 1 || startPoint.getX() > 10 ||
+                endPoint.getX() < 1 || endPoint.getX() > 10 ||
+                startPoint.getYIndex() < 1 || startPoint.getYIndex() > 10 ||
+                endPoint.getYIndex() < 1 || endPoint.getYIndex() > 10
+        ) {
+            errorState = "Error! Wrong ship location! Try again:\n";
+        }
+
+        if (!((getXLength() == (type.getSize() - 1) && getYLength() == 0) ||
+                (getYLength() == (type.getSize() - 1) && getXLength() == 0))) {
+            errorState = "Error! Wrong length of the " + type.getName() + "! Try again:\n";
+        }
+        return errorState;
+    }
+
+    public boolean isValid() {
+        return validateLength().length() == 0;
     }
 }
