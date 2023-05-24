@@ -54,25 +54,32 @@ public class Board {
     void addShipToBoard(ShipType type, byte shipIndex) {
         Scanner scanner = new Scanner(System.in);
         Ship ship;
+        boolean isCrossing;
         // Запрос координат корабля
         do {
+            isCrossing = false;
             System.out.printf("\nEnter the coordinates of the %s (%d cells):\n", type.getName(), type.getSize());
             ship = new Ship(scanner.nextLine(), type);
             System.out.println(ship.getErrorState());
-        } while (!ship.isValid());
+            for (int i = 0; i < shipIndex; i++) {
+                isCrossing = isCrossing || ship.isCrossing(ships[i]);
+            }
+        } while (!ship.isValid() || isCrossing);
         ships[shipIndex] = ship;
 
         // Рисование кораблей на карте
         if (!ship.isVertical()) {
-            for (int i = ship.startPoint.getX(); i < ship.startPoint.getX() + ship.getLength(); i++) {
-                board[ship.startPoint.getYIndex()][i] = SHIP;
+            for (int i = ship.minX; i <= ship.maxX; i++) {
+                board[ship.minY][i] = SHIP;
             }
+            printBoard();
         } else {
-            for (int i = ship.startPoint.getYIndex(); i < ship.startPoint.getYIndex() + ship.getLength(); i++) {
-                board[i][ship.startPoint.getX()] = SHIP;
+            for (int i = ship.minY; i <= ship.maxY; i++) {
+                board[i][ship.minX] = SHIP;
             }
             printBoard();
         }
     }
+
 
 }
