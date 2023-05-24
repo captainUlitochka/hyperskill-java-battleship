@@ -12,6 +12,7 @@ public class Board {
     private static final String MISS = "M";
     Ship[] ships = new Ship[SHIP_COUNT];
 
+    Scanner scanner = new Scanner(System.in);
 
     public Board() {
         board[0][0] = " "; // [по вертикали] [по горизонтали]
@@ -52,7 +53,6 @@ public class Board {
     }
 
     void addShipToBoard(ShipType type, byte shipIndex) {
-        Scanner scanner = new Scanner(System.in);
         Ship ship;
         boolean isCrossing;
         // Запрос координат корабля
@@ -81,5 +81,20 @@ public class Board {
         }
     }
 
+    public void takeAShot(String point) {
+        Coordinate coordinate = new Coordinate(point);
+        String value = board[coordinate.getYIndex()][coordinate.getX()];
+        System.out.println("\nTake a shot!\n");
+        if (value.equals(SHIP)) {
+            System.out.println("\nYou hit a ship!\n");
+            board[coordinate.getYIndex()][coordinate.getX()] = HIT;
+        } else if (value.equals(FOG)) {
+            System.out.println("\nYou missed!\n");
+            board[coordinate.getYIndex()][coordinate.getX()] = MISS;
+        }
+        printBoard();
+
+        // TODO: Проверять, что координата не за границей поля и валидировать в цикле
+    }
 
 }
