@@ -65,11 +65,7 @@ public class Ship {
 
     // Проверка, что корабль не вылезает за границы доски
     String validateBorders() {
-        if (startPoint.getX() < 1 || startPoint.getX() > 10 ||
-                endPoint.getX() < 1 || endPoint.getX() > 10 ||
-                startPoint.getYIndex() < 1 || startPoint.getYIndex() > 10 ||
-                endPoint.getYIndex() < 1 || endPoint.getYIndex() > 10
-        ) {
+        if (!startPoint.isValidBorder() || !endPoint.isValidBorder()) {
             errorState = "Error! Wrong ship location! Try again:\n";
         }
         return errorState;
