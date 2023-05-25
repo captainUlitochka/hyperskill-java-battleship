@@ -3,7 +3,7 @@ package org.example;
 import java.util.Scanner;
 
 public class Board {
-    private static final int BOARD_SIZE = 10;
+    public static final int BOARD_SIZE = 10;
     private static final int SHIP_COUNT = 5;
     private final String[][] board = new String[BOARD_SIZE + 1][BOARD_SIZE + 1];
     private static final String FOG = "~";
@@ -81,20 +81,29 @@ public class Board {
         }
     }
 
-    public void takeAShot(String point) {
-        Coordinate coordinate = new Coordinate(point);
-        String value = board[coordinate.getYIndex()][coordinate.getX()];
+    public void printStartState() {
+        System.out.println("\nThe game starts!\n");
+        printBoard();
+    }
+
+    public void takeAShot() {
         System.out.println("\nTake a shot!\n");
-        if (value.equals(SHIP)) {
+        Coordinate coordinate;
+        do {
+            coordinate = new Coordinate(scanner.next());
+            System.out.print(coordinate.getErrorState());
+        } while (!coordinate.isValidBorder());
+
+        String shotValue = board[coordinate.getYIndex()][coordinate.getX()];
+
+        if (shotValue.equals(SHIP)) {
             System.out.println("\nYou hit a ship!\n");
             board[coordinate.getYIndex()][coordinate.getX()] = HIT;
-        } else if (value.equals(FOG)) {
+        } else if (shotValue.equals(FOG)) {
             System.out.println("\nYou missed!\n");
             board[coordinate.getYIndex()][coordinate.getX()] = MISS;
         }
         printBoard();
-
-        // TODO: Проверять, что координата не за границей поля и валидировать в цикле
     }
 
 }
