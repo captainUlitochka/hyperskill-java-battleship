@@ -35,11 +35,19 @@ public class Board {
         }
     }
 
-    public void printBoard() {
+    public void printBoard(boolean isHidden) {
         for (int i = 0; i < BOARD_SIZE + 1; i++) {
             System.out.print("\n");
             for (int j = 0; j < BOARD_SIZE + 1; j++) {
-                System.out.print(" " + board[i][j]);
+                if (!isHidden) {
+                    System.out.print(" " + board[i][j]);
+                } else {
+                    if (board[i][j].equals(HIT) || board[i][j].equals(MISS) || i == 0 || j == 0) {
+                        System.out.print(" " + board[i][j]);
+                    } else {
+                        System.out.print(" " + FOG);
+                    }
+                }
             }
         }
     }
@@ -72,18 +80,18 @@ public class Board {
             for (int i = ship.minX; i <= ship.maxX; i++) {
                 board[ship.minY][i] = SHIP;
             }
-            printBoard();
+            printBoard(false);
         } else {
             for (int i = ship.minY; i <= ship.maxY; i++) {
                 board[i][ship.minX] = SHIP;
             }
-            printBoard();
+            printBoard(false);
         }
     }
 
     public void printStartState() {
         System.out.println("\nThe game starts!\n");
-        printBoard();
+        printBoard(true);
     }
 
     public void takeAShot() {
@@ -97,13 +105,15 @@ public class Board {
         String shotValue = board[coordinate.getYIndex()][coordinate.getX()];
 
         if (shotValue.equals(SHIP)) {
-            System.out.println("\nYou hit a ship!\n");
             board[coordinate.getYIndex()][coordinate.getX()] = HIT;
+            printBoard(true);
+            System.out.println("\nYou hit a ship!\n");
         } else if (shotValue.equals(FOG)) {
-            System.out.println("\nYou missed!\n");
             board[coordinate.getYIndex()][coordinate.getX()] = MISS;
+            printBoard(true);
+            System.out.println("\nYou missed!\n");
         }
-        printBoard();
+        printBoard(false);
     }
 
 }
