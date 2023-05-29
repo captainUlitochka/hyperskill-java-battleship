@@ -7,7 +7,7 @@ public class Board {
     private static final int SHIP_COUNT = 5;
     private final String[][] board = new String[BOARD_SIZE + 1][BOARD_SIZE + 1];
     private static final String FOG = "~";
-    private static final String SHIP = "O";
+    public static final String SHIP = "O";
     private static final String HIT = "X";
     private static final String MISS = "M";
     Ship[] ships = new Ship[SHIP_COUNT];
@@ -95,25 +95,50 @@ public class Board {
     }
 
     public void takeAShot() {
-        System.out.println("\nTake a shot!\n");
-        Coordinate coordinate;
         do {
-            coordinate = new Coordinate(scanner.next());
-            System.out.print(coordinate.getErrorState());
-        } while (!coordinate.isValidBorder());
+            System.out.println("\nTake a shot!\n");
+            Coordinate coordinate;
+            do {
+                coordinate = new Coordinate(scanner.next());
+                System.out.print(coordinate.getErrorState());
+            } while (!coordinate.isValidBorder());
 
-        String shotValue = board[coordinate.getYIndex()][coordinate.getX()];
+            String shotValue = board[coordinate.getYIndex()][coordinate.getX()];
 
-        if (shotValue.equals(SHIP)) {
-            board[coordinate.getYIndex()][coordinate.getX()] = HIT;
-            printBoard(true);
-            System.out.println("\nYou hit a ship!\n");
-        } else if (shotValue.equals(FOG)) {
-            board[coordinate.getYIndex()][coordinate.getX()] = MISS;
-            printBoard(true);
-            System.out.println("\nYou missed!\n");
-        }
-        printBoard(false);
+            if (shotValue.equals(SHIP) || shotValue.equals(HIT)) {
+                board[coordinate.getYIndex()][coordinate.getX()] = HIT;
+                printBoard(true);
+                int hitIndex = -1;
+                for (int i = 0; i < ships.length; i++) {
+                    if (ships[i].isShipHitted(coordinate)) {
+                        hitIndex = i;
+                    }
+                }
+                String message = "\nYou hit a ship! Try again:\n";
+                if (isAliveShipExists()) {
+                    if (!ships[hitIndex].isAlive()) message = "\nYou sank a ship! Specify a new target:\n";
+                }
+                else {
+                    message = "\nYou sank the last ship. You won. Congratulations!\n";
+                }
+
+                System.out.println(message);
+
+            } else if (shotValue.equals(FOG) || shotValue.equals(MISS)) {
+                board[coordinate.getYIndex()][coordinate.getX()] = MISS;
+                printBoard(true);
+                System.out.println("\nYou missed. Try again:\n");
+            }
+            printBoard(false);
+
+        } while (isAliveShipExists());
     }
 
+    boolean isAliveShipExists() {
+        boolean isAlive = false;
+        for (int i = 0; i < ships.length; i++) {
+            isAlive = isAlive || ships[i].isAlive();
+        }
+        return isAlive;
+    }
 }

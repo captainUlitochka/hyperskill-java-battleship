@@ -1,14 +1,17 @@
 package org.example;
 
+import java.util.Arrays;
+
 public class Ship {
     Coordinate startPoint;
     Coordinate endPoint;
     ShipType type;
-
     byte minX;
     byte minY;
     byte maxX;
     byte maxY;
+    boolean[] cells;
+    int aliveCount;
 
     private String errorState = "";
 
@@ -20,6 +23,14 @@ public class Ship {
         this.minY = (byte) Math.min(startPoint.getYIndex(), endPoint.getYIndex());
         this.maxX = (byte) Math.max(startPoint.getX(), endPoint.getX());
         this.maxY = (byte) Math.max(startPoint.getYIndex(), endPoint.getYIndex());
+        this.cells = new boolean[type.getSize()];
+        Arrays.fill(this.cells, true);
+        this.aliveCount = type.getSize();
+    }
+
+
+    public ShipType getType() {
+        return type;
     }
 
     public byte getMinX() {
@@ -131,7 +142,33 @@ public class Ship {
             }
         }
         if (isCrossing) {
-        System.out.println("\nError! You placed it too close to another one. Try again:\n"); }
+            System.out.println("\nError! You placed it too close to another one. Try again:\n");
+        }
         return isCrossing;
+    }
+
+    // Проверяем, подбит ли корабль, и если подбит, то отмечаем какая палуба
+    public boolean isShipHitted(Coordinate coordinate) {
+        int x = coordinate.getX();
+        int y = coordinate.getYIndex();
+
+        if (!isVertical()) {
+            if (y == minY && x >= minX && x <= maxX) {
+                if (cells[x - minX]) aliveCount--;
+                cells[x - minX] = false;
+                return  true;
+            }
+        } else {
+            if (x == minX && y >= minY && y <= maxY) {
+                if (cells[y - minY]) aliveCount--;
+                cells[y - minY] = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isAlive() {
+        return aliveCount > 0;
     }
 }
