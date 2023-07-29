@@ -1,4 +1,4 @@
-package org.example;
+package battleship;
 
 import java.util.Arrays;
 
@@ -156,7 +156,7 @@ public class Ship {
             if (y == minY && x >= minX && x <= maxX) {
                 if (cells[x - minX]) aliveCount--;
                 cells[x - minX] = false;
-                return  true;
+                return true;
             }
         } else {
             if (x == minX && y >= minY && y <= maxY) {

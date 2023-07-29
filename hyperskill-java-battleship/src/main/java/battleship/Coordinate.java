@@ -1,15 +1,16 @@
-package org.example;
+package battleship;
 
 public class Coordinate {
     public char y;
     public byte x;
+
     public Coordinate(String coordinate) {
         this.y = coordinate.charAt(0);
         this.x = Byte.parseByte(coordinate.substring(1));
     }
 
     public byte getYIndex() {
-        return (byte) ((byte)y - (byte)'A' + 1);
+        return (byte) ((byte) y - (byte) 'A' + 1);
     }
 
     public byte getX() {
@@ -17,8 +18,8 @@ public class Coordinate {
     }
 
     public boolean isValidBorder() {
-        return (getYIndex() >=1 && getYIndex() <= Board.BOARD_SIZE &&
-                getX()>= 1 && getX() <= Board.BOARD_SIZE);
+        return (getYIndex() >= 1 && getYIndex() <= Board.BOARD_SIZE &&
+                getX() >= 1 && getX() <= Board.BOARD_SIZE);
     }
 
     public String getErrorState() {

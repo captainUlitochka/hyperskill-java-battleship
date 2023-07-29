@@ -1,4 +1,4 @@
-package org.example;
+package battleship;
 
 public enum ShipType {
     /*
