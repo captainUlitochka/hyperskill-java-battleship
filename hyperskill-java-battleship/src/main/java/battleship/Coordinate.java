@@ -18,12 +18,12 @@ public class Coordinate {
     }
 
     public boolean isValidBorder() {
-        return (getYIndex() >= 1 && getYIndex() <= Board.BOARD_SIZE &&
-                getX() >= 1 && getX() <= Board.BOARD_SIZE);
+        return (getYIndex() < 1 || getYIndex() > Board.BOARD_SIZE ||
+                getX() < 1 || getX() > Board.BOARD_SIZE);
     }
 
     public String getErrorState() {
-        if (!isValidBorder()) {
+        if (isValidBorder()) {
             return "\nError! You entered the wrong coordinates! Try again:\n";
         }
         return "";

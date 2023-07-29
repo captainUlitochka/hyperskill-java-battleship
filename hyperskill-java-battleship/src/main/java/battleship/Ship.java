@@ -28,27 +28,6 @@ public class Ship {
         this.aliveCount = type.getSize();
     }
 
-
-    public ShipType getType() {
-        return type;
-    }
-
-    public byte getMinX() {
-        return minX;
-    }
-
-    public byte getMinY() {
-        return minY;
-    }
-
-    public byte getMaxX() {
-        return maxX;
-    }
-
-    public byte getMaxY() {
-        return maxY;
-    }
-
     byte getXLength() {
         return (byte) Math.abs(startPoint.getX() - endPoint.getX());
     }
@@ -61,14 +40,6 @@ public class Ship {
         return getYLength() > 0;
     }
 
-    byte getLength() {
-        if (isVertical()) {
-            return (byte) (getYLength() + 1);
-        } else {
-            return (byte) (getXLength() + 1);
-        }
-    }
-
     public String getErrorState() {
         isValid();
         return errorState;
@@ -76,7 +47,7 @@ public class Ship {
 
     // Проверка, что корабль не вылезает за границы доски
     String validateBorders() {
-        if (!startPoint.isValidBorder() || !endPoint.isValidBorder()) {
+        if (startPoint.isValidBorder() || endPoint.isValidBorder()) {
             errorState = "Error! Wrong ship location! Try again:\n";
         }
         return errorState;
@@ -102,9 +73,6 @@ public class Ship {
 
         if (this.isVertical() && otherShip.isVertical()) {
             //  Оба вертикальные, проверить по X пересечение если стоят на 1 и той же или на соседних по Y
-            if (Math.abs(this.startPoint.getX() - otherShip.startPoint.getX()) > 1) {
-                isCrossing = false;
-            }
             if (Math.abs(this.startPoint.getX() - otherShip.startPoint.getX()) <= 1) {
                 if (otherShip.minY >= (this.minY - 1) && otherShip.minY <= (maxY + 1)) {
                     isCrossing = true;

@@ -113,7 +113,7 @@ public class Board {
         do {
             coordinate = new Coordinate(scanner.next());
             System.out.print(coordinate.getErrorState());
-        } while (!coordinate.isValidBorder());
+        } while (coordinate.isValidBorder());
         return coordinate;
     }
 
@@ -140,8 +140,8 @@ public class Board {
 
     boolean isAliveShipExists() {
         boolean isAlive = false;
-        for (int i = 0; i < ships.length; i++) {
-            isAlive = isAlive || ships[i].isAlive();
+        for (Ship ship : ships) {
+            isAlive = isAlive || ship.isAlive();
         }
         return isAlive;
     }
