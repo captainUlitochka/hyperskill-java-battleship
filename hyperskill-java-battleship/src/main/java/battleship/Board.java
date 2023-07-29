@@ -1,4 +1,4 @@
-package org.example;
+package battleship;
 
 import java.util.Scanner;
 
@@ -89,49 +89,53 @@ public class Board {
         }
     }
 
-    public void printStartState() {
-        System.out.println("\nThe game starts!\n");
-        printBoard(true);
+    public void takeAShot() {
+        // Reading coordinates from player
+        Coordinate coordinate = processPlayersInputCoordinates();
+
+        // Painting a hit or miss and show a message about shot's result
+        String shotValue = board[coordinate.getYIndex()][coordinate.getX()];
+        if (shotValue.equals(SHIP) || shotValue.equals(HIT)) {
+            board[coordinate.getYIndex()][coordinate.getX()] = HIT;
+            printBoard(true);
+            int hitCount = countDestroyedParts(coordinate);
+            System.out.println(printSuccessfulShotResult(hitCount));
+        } else if (shotValue.equals(FOG) || shotValue.equals(MISS)) {
+            board[coordinate.getYIndex()][coordinate.getX()] = MISS;
+            printBoard(true);
+            System.out.println("\nYou missed. Try again:\n");
+        }
     }
 
-    public void takeAShot() {
+    // Take an input and check if it's correct
+    private Coordinate processPlayersInputCoordinates() {
+        Coordinate coordinate;
         do {
-            System.out.println("\nTake a shot!\n");
-            Coordinate coordinate;
-            do {
-                coordinate = new Coordinate(scanner.next());
-                System.out.print(coordinate.getErrorState());
-            } while (!coordinate.isValidBorder());
+            coordinate = new Coordinate(scanner.next());
+            System.out.print(coordinate.getErrorState());
+        } while (!coordinate.isValidBorder());
+        return coordinate;
+    }
 
-            String shotValue = board[coordinate.getYIndex()][coordinate.getX()];
-
-            if (shotValue.equals(SHIP) || shotValue.equals(HIT)) {
-                board[coordinate.getYIndex()][coordinate.getX()] = HIT;
-                printBoard(true);
-                int hitIndex = -1;
-                for (int i = 0; i < ships.length; i++) {
-                    if (ships[i].isShipHitted(coordinate)) {
-                        hitIndex = i;
-                    }
-                }
-                String message = "\nYou hit a ship! Try again:\n";
-                if (isAliveShipExists()) {
-                    if (!ships[hitIndex].isAlive()) message = "\nYou sank a ship! Specify a new target:\n";
-                }
-                else {
-                    message = "\nYou sank the last ship. You won. Congratulations!\n";
-                }
-
-                System.out.println(message);
-
-            } else if (shotValue.equals(FOG) || shotValue.equals(MISS)) {
-                board[coordinate.getYIndex()][coordinate.getX()] = MISS;
-                printBoard(true);
-                System.out.println("\nYou missed. Try again:\n");
+    // Counting destroyed parts of player's ship
+    private int countDestroyedParts(Coordinate coordinate) {
+        int hitIndex = -1;
+        for (int i = 0; i < ships.length; i++) {
+            if (ships[i].isShipHitted(coordinate)) {
+                hitIndex = i;
             }
-            printBoard(false);
+        }
+        return hitIndex;
+    }
 
-        } while (isAliveShipExists());
+    private String printSuccessfulShotResult(int hitCount) {
+        String message = "\nYou hit a ship! Try again:\n";
+        if (isAliveShipExists()) {
+            if (!ships[hitCount].isAlive()) message = "\nYou sank a ship! Specify a new target:\n";
+        } else {
+            message = "\nYou sank the last ship. You won. Congratulations!\n";
+        }
+        return message;
     }
 
     boolean isAliveShipExists() {
